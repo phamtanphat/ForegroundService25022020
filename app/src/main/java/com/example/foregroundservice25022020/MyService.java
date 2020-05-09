@@ -52,6 +52,7 @@ public class MyService extends Service {
                         .setContentTitle("Có thông báo mới")
                         .setContentText("Bạn nhận được thông báo có version mới cho app")
                         .setWhen(System.currentTimeMillis())
+                        .setOngoing(true)
                         .setContentIntent(pendingIntent);
 
         // Hien thi ra notification
