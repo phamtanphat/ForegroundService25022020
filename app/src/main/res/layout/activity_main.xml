@@ -10,13 +10,13 @@
 
     <Button
         android:id="@+id/buttonStartService"
-        android:text="Start Background Service"
+        android:text="Start Foreground Service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <Button
         android:layout_below="@+id/buttonStartService"
         android:id="@+id/buttonStopService"
-        android:text="Stop Background Service"
+        android:text="Stop Foreground Service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

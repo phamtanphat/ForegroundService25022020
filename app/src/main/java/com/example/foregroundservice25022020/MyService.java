@@ -1,13 +1,21 @@
 package com.example.foregroundservice25022020;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 public class MyService extends Service {
+
+    String CHANNEL_ID = "chanel_01";
+    int mNotificationId = 1;
     // Khi nao dung ve Bound service thi moi viet lai
     @Nullable
     @Override
@@ -24,6 +32,43 @@ public class MyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "onStart Command", Toast.LENGTH_SHORT).show();
-        return START_NOT_STICKY;
+        createNotification();
+        return START_STICKY;
+    }
+    private void createNotification() {
+        // Intent : Thao tac voi notification
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder build =
+                new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Có thông báo mới")
+                        .setContentText("Bạn nhận được thông báo có version mới cho app")
+                        .setWhen(System.currentTimeMillis())
+                        .setContentIntent(pendingIntent);
+
+        // Hien thi ra notification
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Notifcation";
+            NotificationChannel notificationChannel =
+                    new NotificationChannel(
+                            CHANNEL_ID,
+                            name,
+                            NotificationManager.IMPORTANCE_LOW);
+            // che độ rung
+            notificationChannel.enableVibration(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        startForeground(1 , build.build());
     }
 }
